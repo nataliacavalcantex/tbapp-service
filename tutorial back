@@ -1,0 +1,173 @@
+# PASSO A PASSO NÂO COMENTADO, para quem tem preguiça de ler,
+# recomendo ler o explicativo caso você esteja perdido, é sério,
+# vc deve saber o que cada coisa funciona
+
+# entre na pasta do back
+# só copia e cola, oque tem '#' vc n copia
+
+#LEIA!!!!!!!!!!#
+sudo apt-get install postgresql-10
+
+# mude a senha para postgres
+sudo passwd postgres
+
+sudo pip install virtualenv
+
+virtualenv venv
+
+source venv/bin/activate
+
+sudo apt-get install libpq-dev
+
+pip3 install -r requirements.txt
+
+export SECRET_KEY='mysecret'
+export DATABASE_URL='postgres://postgres:123@localhost:5555/tbapp'
+export FLASK_ENV=development
+
+# entrar com a senha que modificamos
+su postgres
+
+psql postgres postgres
+
+# mude a senha para postgres
+\password postgres
+
+CREATE DATABASE ueasistemas;
+
+\q
+
+exit
+
+$ python3 -c 'from app import db; db.create_all()'
+
+su postgres
+
+psql postgres postgres
+
+\c ueasistemas
+
+INSERT INTO uea_unidade VALUES (123456, 'Teste', 'TST', 1);
+INSERT INTO uea_curso VALUES (1, 'TST', 'Teste', 1, 123456);
+\q
+
+exit
+
+python3 configuraDir.py
+
+python3 run.py
+
+#--------------------------------------------------------------
+# Caso vc já fez o tutorial mas baixou um repositório novo
+#--------------------------------------------------------------
+virtualenv venv
+
+source venv/bin/activate
+
+pip3 install -r requirements.txt
+
+export SECRET_KEY='tbapp'
+export DATABASE_URL='postgres://postgres:123@localhost:5555/db_tbapp'
+export FLASK_ENV=development
+
+python3 run.py
+
+
+#--------------------------------------------------------------
+# Passo a Passo comentado
+#--------------------------------------------------------------
+# eu escrevi o tutorial com o esquema de cores e organização do python, se quiser mude pra uma melhor leitura
+
+# 0. Entre na pasta 'back' através do terminal e siga os passos
+
+# 1. INSTALANDO O POSTGRE SQL - 10 e modificando a senha
+    sudo apt-get install postgresql-10
+
+    # Aqui estamos mudando a senha do SUPER USUARIO postgres
+    # por padrão, mude a senha para 'postgres'
+    sudo passwd postgres
+
+
+# 2. CRIANDO O AMBIENTE VIRTUAL
+    # O ambiente virtual tem a função de instalar todos os pacotes pip no projeto, então
+    # os pacotes instalados não interferem nos pacotes globais.
+    # Utilizamos esse método para fins de segurança, caso um pacote quebre, ele não
+    # afeta os pacotes instalados globalmente, fácil exclusão.
+    
+    # baixe o ambiente virtual, caso n tenha o pip, instale
+    sudo pip install virtualenv
+
+    # cria o ambiente virtual na pasta atual, o ambiente é a pasta com o nome de 'venv'
+    virtualenv venv
+    
+    # entra no ambiente virtual, a partir desse comando, todos os pacotes serão
+    # instalados nesse ambiente virtual
+    source venv/bin/activate
+
+    # para sair do ambiente virtual use o comando 'deactivate', como os passos seguintes
+    # necessitam do ambiente, então não saia no momento.
+
+# 3. Instalando os pacotes de dependência
+    
+    # Um dos pacotes do SempreaUEA necessita dessa biblioteca
+    sudo apt-get install libpq-dev
+
+    # Instale todos os pacotes do Projeto
+    pip3 install -r requirements.txt
+
+# 4. Exportando as chaves
+    # São chaves que são utilizadas para o funcionamento do programa, apenas copie e cole
+    export SECRET_KEY='ueasempre'
+    export DATABASE_URL='postgres://postgres:postgres@localhost/ueasistemas'
+    export FLASK_ENV=development
+
+
+# 5. Criando o Banco de Dados e modifando
+    # Entramos no SUPER USUARIO postgres, digite a senha que foi colocada no passo 1
+    su postgres
+
+        #  Entra no PSQL
+        psql postgres postgres
+
+            # modifica a senha
+            \password postgres
+
+            # Crie o Banco de Dados com o nome 'ueasistemas', não esqueça do ;
+            CREATE DATABASE ueasistemas;
+
+        # Comando que sai do psql
+        \q
+
+    #Comando que sai do super usuário postgres
+    exit
+
+    # Cria todas as tabelas do banco
+    $ python3 -c 'from app import db; db.create_all()'
+
+    # Agora manualmente vamos inserir dois valores na tabelas para fins de teste
+
+    # Entra no Super Usuário
+    su postgres
+
+        # entre com postgres postgres
+        psql postgres postgres
+
+            # insere os valores na tabela
+            INSERT INTO uea_unidade VALUES (123456, 'Teste', 'TST', 1);
+            INSERT INTO uea_curso VALUES (1, 'TST', 'Teste', 1, 123456);
+        \q
+    exit
+
+# 6. Cria diretório das fotos de perfis
+	python3 configuraDir.py
+
+# 7. Abra o servidor back
+    python3 run.py
+
+
+
+# ------------------------------------------
+# caso continue dando errado
+# ------------------------------------------
+
+1. Tenha Certeza se a porta do arquivo src/Global no front é a mesma do back
